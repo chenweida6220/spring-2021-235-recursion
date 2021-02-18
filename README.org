@@ -1,10 +1,10 @@
 * Fall 2021 235 Recursion Project
 
-* Last name:
+* Last name: Chen
 
-* First name:
+* First name: Wei Da
 
-* GitHub username:
+* GitHub username: chenweida6220
 
 * Notes:
 
@@ -15,19 +15,19 @@
 - Fill in your name and GitHub username on top.
 - solve one of the three problems below
 - you must use a Makefile to build the project. The executable should
-  be named *main*. 
+  be named *main*.
 - For development, I would recommend animating your program using the
   ansi escape code technique we used for the maze solver. This will,
   however slow down your program. If your final program takes more
   than 10 seconds to run on your laptop, turn off this feature for
   your submission so that when run your program just prints out the
-  final result. 
+  final result.
 
 * Complete one of the following three
 ** Knights tour
 
 In Chess a knight moves with a 2,1 or 1,2 combination as indicated
-here: 
+here:
 
 #+begin_example
 .8.1.
@@ -43,24 +43,24 @@ the eight locations numbered 1 through 8.
 Use a 2D array to represent the board and write a program that, given
 a starting location, will determine a sequence of moves that the
 knight can take to visit every square on the board without visiting
-any square more than once. 
+any square more than once.
 
 This is analogous to the maze problem and solution.
 
-Notes: 
+Notes:
 
 - Your program should not require any user input and should just run
-  and show that it works. 
+  and show that it works.
 - There might not be a solution for any size board from any starting
-  location. 
+  location.
 - Your solution should work for any size board with any starting
   location but develop for a 5x5 board as it will run more quickly.
 - Your submitted solution should show that it works for a 5x5
   board. Specify a starting location that works.
 - Your solution should print out a board with numbers representing the
   move sequence.
-  
-  For example, a valid solution might show: 
+
+  For example, a valid solution might show:
 
 #+begin_example
  1:14:19: 8:25:
@@ -88,13 +88,13 @@ x..x..x.
 #+end_example
 
 In the above example, the queen at the center can move/attack any of
-the locations marked with an *x*. 
+the locations marked with an *x*.
 
 Write a program that will find an arrangement of N queens on an NxN
 board such that no queen can attack another queen.
 
 For example, for a 4x4 board, this arrangement would solve the
-problem: 
+problem:
 
 #+begin_example
 ..Q.
@@ -104,9 +104,9 @@ Q...
 #+end_example
 
 Use a 2D array to represent your board. When run, your program should
-print out a board with a legal configuration of queens. 
+print out a board with a legal configuration of queens.
 
-** 15 puzzle 
+** 15 puzzle
 
 A 15 puzzle is a comprised of a 4x4 grid with 15 tiles and one
 space. The puzzle is solved by sliding tiles within this grid to
@@ -115,4 +115,3 @@ https://15puzzle.netlify.app/ for an example.
 
 Your program should create a 15x15 puzzle and run your solver to
 determine the moves to solve the puzzle.
-
