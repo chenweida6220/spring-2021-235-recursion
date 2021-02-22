@@ -13,5 +13,6 @@ using namespace std;
 
 int main() {
   createBoard();
+  moveKnight(0, 0, 1);
   printBoard();
 }
