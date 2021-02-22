@@ -12,7 +12,6 @@ using namespace std;
 */
 
 int main() {
-  createBoard();
-  startKnight(1);
-  printBoard();
+  // (0,3) is Position 1 of Knight
+  centerpiece(0,3);
 }

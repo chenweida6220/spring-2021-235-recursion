@@ -1,387 +1,169 @@
 #include <iostream>
-#include <iomanip>      // std::setw for field width
-#include <string>       // to_string
-#include <algorithm>    // find
-#include <vector>       // vector
-#include <cstdlib>      // random
 using namespace std;
 
-#include "knights.h"
+const int sizeRow = 6;
+const int sizeCol = 6;
 
-string board[5][5];
+int row_delta[8] = {2, 1, -1, -2, -2, -1, 1, 2};
+int col_delta[8] = {-1, -2, -2, -1, 1, 2, 2, 1};
 
-void createBoard() {
-  for (int row = 0; row < 5; row++) {
-    for (int col = 0; col < 5; col++) {
-      board[row][col] = "[]";
-    }
-  }
-}
+int board[sizeRow][sizeCol];
 
 void printBoard() {
-  for (int row = 0; row < 5; row++) {
-    for (int col = 0; col < 5; col++) {
-      cout << setw(3) << board[row][col] << " ";
+    for (int i = 0; i < sizeRow; i++) {
+        for (int j = 0; j < sizeCol; j++) {
+            if (board[i][j] < 10)
+                cout << ' ';
+            cout << board[i][j] << ' ';
+        }
+        cout << endl;
     }
-    cout << endl;
-  }
+    cin.get();
 }
 
-int row;
-int col;
-int numMove;
-
-// initializing initial position of knight
-void startKnight(int startingPosition) {
-  numMove = startingPosition;
-
-  switch(startingPosition) {
-    case 1:
-      board[0][3] = "[" + to_string(startingPosition) + "]";
-      row = 0;
-      col = 3;
-      roamKnight(row, col);
-      break;
-    case 2:
-      board[1][4] = "[" + to_string(startingPosition) + "]";
-      row = 1;
-      col = 4;
-      roamKnight(row, col);
-      break;
-    case 3:
-      board[3][4] = "[" + to_string(startingPosition) + "]";
-      row = 3;
-      col = 4;
-      roamKnight(row, col);
-      break;
-    case 4:
-      board[4][3] = "[" + to_string(startingPosition) + "]";
-      row = 4;
-      col = 3;
-      roamKnight(row, col);
-      break;
-    case 5:
-      board[4][1] = "[" + to_string(startingPosition) + "]";
-      row = 4;
-      col = 1;
-      roamKnight(row, col);
-      break;
-    case 6:
-      board[3][0] = "[" + to_string(startingPosition) + "]";
-      row = 3;
-      col = 0;
-      roamKnight(row, col);
-      break;
-    case 7:
-      board[1][0] = "[" + to_string(startingPosition) + "]";
-      row = 1;
-      col = 0;
-      roamKnight(row, col);
-      break;
-    case 8:
-      board[0][1] = "[" + to_string(startingPosition) + "]";
-      row = 0;
-      col = 1;
-      roamKnight(row, col);
-      break;
-  }
-}
-
-// moving knight
-void roamKnight(int x, int y) {
-  cout << endl;
-
-    if (row + 1 > -1 && row + 1 < 5 && col + 2 > -1 && col + 2 < 5 && board[row + 1][col + 2] == "[]") {
-        numMove++;
-        row += 1;
-        col += 2;
-        board[row][col] = "[" + to_string(numMove) + "]";
-
-        // check if move results in no other possible moves
-        // if valid, print and proceed with move
-        if (isValid(row, col)) {
-          printBoard();
-          roamKnight(row, col);
-        }
-        // if invalid, resets to default
-        else {
-          numMove--;
-          board[row][col] = "[]";
-          row -= 1;
-          col -= 2;
-
-          while (!isValid(row, col)) {
-            generateNewRowCol(row, col);
-            printBoard();
-            roamKnight(row, col);
-          }
-        }
-    }
-    else if (row + 1 > -1 && row + 1 < 5 && col - 2 > -1 && col - 2 < 5 && board[row + 1][col - 2] == "[]") {
-        numMove++;
-        row += 1;
-        col -= 2;
-        board[row][col] = "[" + to_string(numMove) + "]";
-        printBoard();
-        roamKnight(row, col);
-
-        if (isValid(row, col)) {
-          printBoard();
-          roamKnight(row, col);
-        }
-        else {
-          numMove--;
-          board[row][col] = "[]";
-          row -= 1;
-          col += 2;
-
-          while (!isValid(row, col)) {
-            generateNewRowCol(row, col);
-            printBoard();
-            roamKnight(row, col);
-          }
-        }
-    }
-    else if (row - 1 > -1 && row - 1 < 5 && col + 2 > -1 && col + 2 < 5 && board[row - 1][col + 2] == "[]") {
-        numMove++;
-        row -= 1;
-        col += 2;
-        board[row][col] = "[" + to_string(numMove) + "]";
-        printBoard();
-        roamKnight(row, col);
-
-        // check if move results in no other possible moves
-        if (isValid(row, col)) {
-          printBoard();
-          roamKnight(row, col);
-        }
-        else {
-          numMove--;
-          board[row][col] = "[]";
-          row += 1;
-          col -= 2;
-
-          while (!isValid(row, col)) {
-            generateNewRowCol(row, col);
-            printBoard();
-            roamKnight(row, col);
-          }
-        }
-    }
-    else if (row - 1 > -1 && row - 1 < 5 && col - 2 > -1 && col - 2 < 5 && board[row - 1][col - 2] == "[]") {
-        numMove++;
-        row -= 1;
-        col -= 2;
-        board[row][col] = "[" + to_string(numMove) + "]";
-        printBoard();
-        roamKnight(row, col);
-
-        // check if move results in no other possible moves
-        if (isValid(row, col)) {
-          printBoard();
-          roamKnight(row, col);
-        }
-        else {
-          numMove--;
-          board[row][col] = "[]";
-          row += 1;
-          col += 2;
-
-          while (!isValid(row, col)) {
-            generateNewRowCol(row, col);
-            printBoard();
-            roamKnight(row, col);
-          }
-        }
-    }
-    else if (row - 2 > -1 && row - 2 < 5 && col + 1 > -1 && col + 1 < 5 && board[row - 2][col + 1] == "[]") {
-        numMove++;
-        row -= 2;
-        col += 1;
-        board[row][col] = "[" + to_string(numMove) + "]";
-        printBoard();
-        roamKnight(row, col);
-
-        // check if move results in no other possible moves
-        if (isValid(row, col)) {
-          printBoard();
-          roamKnight(row, col);
-        }
-        else {
-          numMove--;
-          board[row][col] = "[]";
-          row += 2;
-          col -= 1;
-
-          while (!isValid(row, col)) {
-            generateNewRowCol(row, col);
-            printBoard();
-            roamKnight(row, col);
-          }
-        }
-    }
-    else if (row - 2 > -1 && row - 2 < 5 && col - 1 > -1 && col - 1 < 5 && board[row - 2][col - 1] == "[]") {
-        numMove++;
-        row -= 2;
-        col -= 1;
-        board[row][col] = "[" + to_string(numMove) + "]";
-        printBoard();
-        roamKnight(row, col);
-
-        // check if move results in no other possible moves
-        if (isValid(row, col)) {
-          printBoard();
-          roamKnight(row, col);
-        }
-        else {
-          numMove--;
-          board[row][col] = "[]";
-          row += 2;
-          col -= 1;
-
-          while (!isValid(row, col)) {
-            generateNewRowCol(row, col);
-            printBoard();
-            roamKnight(row, col);
-          }
-        }
-    }
-    else if (row + 2 > -1 && row + 2 < 5 && col + 1 > -1 && col + 1 < 5 && board[row + 2][col + 1] == "[]") {
-        numMove++;
-        row += 2;
-        col += 1;
-        board[row][col] = "[" + to_string(numMove) + "]";
-        printBoard();
-        roamKnight(row, col);
-
-        // check if move results in no other possible moves
-        if (isValid(row, col)) {
-          printBoard();
-          roamKnight(row, col);
-        }
-        else {
-          numMove--;
-          board[row][col] = "[]";
-          row -= 2;
-          col -= 1;
-
-          while (!isValid(row, col)) {
-            generateNewRowCol(row, col);
-            printBoard();
-            roamKnight(row, col);
-          }
-        }
-    }
-    else if (row + 2 > -1 && row + 2 < 5 && col - 1 > -1 && col - 1 < 5 && board[row + 2][col - 1] == "[]") {
-        numMove++;
-        row += 2;
-        col -= 1;
-        board[row][col] = "[" + to_string(numMove) + "]";
-        printBoard();
-        roamKnight(row, col);
-
-        // check if move results in no other possible moves
-        if (isValid(row, col)) {
-          printBoard();
-          roamKnight(row, col);
-        }
-        else {
-          numMove--;
-          board[row][col] = "[]";
-          row -= 2;
-          col += 1;
-
-          while (!isValid(row, col)) {
-            generateNewRowCol(row, col);
-            printBoard();
-            roamKnight(row, col);
-          }
-        }
-    }
-}
-
-bool isValid(int x, int y) {
-  if (row + 1 > -1 && row + 1 < 5 && col + 2 > -1 && col + 2 < 5 && board[row + 1][col + 2] == "[]") {
-      return true;
-  }
-  else if (row + 1 > -1 && row + 1 < 5 && col - 2 > -1 && col - 2 < 5 && board[row + 1][col - 2] == "[]") {
-      return true;
-  }
-  else if (row - 1 > -1 && row - 1 < 5 && col + 2 > -1 && col + 2 < 5 && board[row - 1][col + 2] == "[]") {
-      return true;
-  }
-  else if (row - 1 > -1 && row - 1 < 5 && col - 2 > -1 && col - 2 < 5 && board[row - 1][col - 2] == "[]") {
-      return true;
-  }
-  else if (row - 2 > -1 && row - 2 < 5 && col + 1 > -1 && col + 1 < 5 && board[row - 2][col + 1] == "[]") {
-      return true;
-  }
-  else if (row - 2 > -1 && row - 2 < 5 && col - 1 > -1 && col - 1 < 5 && board[row - 2][col - 1] == "[]") {
-      return true;
-  }
-  else if (row + 2 > -1 && row + 2 < 5 && col + 1 > -1 && col + 1 < 5 && board[row + 2][col + 1] == "[]") {
-      return true;
-  }
-  else if (row + 2 > -1 && row + 2 < 5 && col - 1 > -1 && col - 1 < 5 && board[row + 2][col - 1] == "[]") {
-      return true;
-  }
-  else {
-    return false;
-  }
-}
-
-vector<int> vecRows {2, 1, -1, -2, -2, -1, 1, 2};
-vector<int> vecCols {1, 2, 2, 1, -1, -2, -2, -1};
-
-void generateNewRowCol(int x, int y) {
-  // Iterator used to store the position of searched element
-  vector<int>::iterator itRow = find(vecRows.begin(), vecRows.end(), x);
-  vector<int>::iterator itCol = find(vecCols.begin(), vecCols.end(), y);
-  int xIndex = itRow - vecRows.begin();
-  int yIndex = itCol - vecCols.begin();
-
-  // if x and y have the same index, remove them from both vectors
-  if (xIndex == yIndex) {
-    vecRows.erase(vecRows.begin() + xIndex);
-    vecRows.erase(vecCols.begin() + yIndex);
-  }
-
-  srand(time(0));
-  while(!isValid(row, col)) {
-    row = vecRows[rand()%((7 - 0))];
-    col = vecCols[rand()%((7 - 0))];
-    generateNewRowCol(row, col);
-  }
-
-  // defaulted for next usage
-  vecRows = {2, 1, -1, -2, -2, -1, 1, 2};
-  vecCols = {1, 2, 2, 1, -1, -2, -2, -1};
-}
-
-// if (row + 1 > -1 && row + 1 < 5 && col + 2 > -1 && col + 2 < 5 && board[row + 1][col + 2] == "[]") {
+// bool isValid(int x, int y) {
+//   if (
+//        (row + 1 > -1 && row + 1 < 5 && col + 2 > -1 && col + 2 < 5 && board[row + 1][col + 2] == "[]")
+//     || (row + 1 > -1 && row + 1 < 5 && col - 2 > -1 && col - 2 < 5 && board[row + 1][col - 2] == "[]")
+//     || (row - 1 > -1 && row - 1 < 5 && col + 2 > -1 && col + 2 < 5 && board[row - 1][col + 2] == "[]")
+//     || (row - 1 > -1 && row - 1 < 5 && col - 2 > -1 && col - 2 < 5 && board[row - 1][col - 2] == "[]")
+//     || (row - 2 > -1 && row - 2 < 5 && col + 1 > -1 && col + 1 < 5 && board[row - 2][col + 1] == "[]")
+//     || (row - 2 > -1 && row - 2 < 5 && col - 1 > -1 && col - 1 < 5 && board[row - 2][col - 1] == "[]")
+//     || (row + 2 > -1 && row + 2 < 5 && col + 1 > -1 && col + 1 < 5 && board[row + 2][col + 1] == "[]")
+//     || (row + 2 > -1 && row + 2 < 5 && col - 1 > -1 && col - 1 < 5 && board[row + 2][col - 1] == "[]")
+//   ) {
 //     return true;
-// }
-// else if (row + 1 > -1 && row + 1 < 5 && col - 2 > -1 && col - 2 < 5 && board[row + 1][col - 2] == "[]") {
-//     return true;
-// }
-// else if (row - 1 > -1 && row - 1 < 5 && col + 2 > -1 && col + 2 < 5 && board[row - 1][col + 2] == "[]") {
-//     return true;
-// }
-// else if (row - 1 > -1 && row - 1 < 5 && col - 2 > -1 && col - 2 < 5 && board[row - 1][col - 2] == "[]") {
-//     return true;
-// }
-// else if (row - 2 > -1 && row - 2 < 5 && col + 1 > -1 && col + 1 < 5 && board[row - 2][col + 1] == "[]") {
-//     return true;
-// }
-// else if (row - 2 > -1 && row - 2 < 5 && col - 1 > -1 && col - 1 < 5 && board[row - 2][col - 1] == "[]") {
-//     return true;
-// }
-// else if (row + 2 > -1 && row + 2 < 5 && col + 1 > -1 && col + 1 < 5 && board[row + 2][col + 1] == "[]") {
-//     return true;
-// }
-// else if (row + 2 > -1 && row + 2 < 5 && col - 1 > -1 && col - 1 < 5 && board[row + 2][col - 1] == "[]") {
-//     return true;
-// }
-// else {
+//   }
+//
 //   return false;
+// }
+//
+// // initializing initial position of knight
+// void startKnight(int startingPosition) {
+//   numMove = startingPosition;
+//
+//   switch(startingPosition) {
+//     case 1:
+//       board[0][3] = "[" + to_string(startingPosition) + "]";
+//       row = 0;
+//       col = 3;
+//       roamKnight(row, col);
+//       break;
+//     case 2:
+//       board[1][4] = "[" + to_string(startingPosition) + "]";
+//       row = 1;
+//       col = 4;
+//       roamKnight(row, col);
+//       break;
+//     case 3:
+//       board[3][4] = "[" + to_string(startingPosition) + "]";
+//       row = 3;
+//       col = 4;
+//       roamKnight(row, col);
+//       break;
+//     case 4:
+//       board[4][3] = "[" + to_string(startingPosition) + "]";
+//       row = 4;
+//       col = 3;
+//       roamKnight(row, col);
+//       break;
+//     case 5:
+//       board[4][1] = "[" + to_string(startingPosition) + "]";
+//       row = 4;
+//       col = 1;
+//       roamKnight(row, col);
+//       break;
+//     case 6:
+//       board[3][0] = "[" + to_string(startingPosition) + "]";
+//       row = 3;
+//       col = 0;
+//       roamKnight(row, col);
+//       break;
+//     case 7:
+//       board[1][0] = "[" + to_string(startingPosition) + "]";
+//       row = 1;
+//       col = 0;
+//       roamKnight(row, col);
+//       break;
+//     case 8:
+//       board[0][1] = "[" + to_string(startingPosition) + "]";
+//       row = 0;
+//       col = 1;
+//       roamKnight(row, col);
+//       break;
+//   }
+// }
+
+// bool isValid(int row, int col) {
+//   if ((row < 0 || row >= 5 || col < 0 || col >= 5) && board[sizeRow][sizeCol] != 0) {
+//     return true;
+//   }
+//   return false;
+// }
+
+bool knightsTour(int numMove, int x, int y) {
+    if (numMove == sizeRow * sizeCol) {
+        printBoard();
+        return true;
+    }
+
+    for (int a = 0; a < 8; a++) {
+        int nextX = x + row_delta[a];
+        int nextY = y + col_delta[a];
+
+        // if (isValid(nextX, nextY)) {
+        //   continue;
+        // }
+
+        if (nextX < 0 || nextX >= sizeRow || nextY < 0 || nextY >= sizeCol)
+            continue;
+
+        if (board[nextX][nextY] != 0)
+            continue;
+
+        board[nextX][nextY] = numMove + 1;
+        knightsTour(numMove + 1, nextX, nextY);
+        board[nextX][nextY] = 0;
+    }
+    return false;
+}
+
+void centerpiece(int initialROW, int initialCOL) {
+  for (int row = 0; row < sizeRow; row++) {
+    for (int col = 0; col < sizeCol; col++) {
+      board[row][col] = 0;
+    }
+  }
+    board[initialROW][initialCOL] = 1;
+    knightsTour(1, initialROW, initialCOL);
+}
+
+// vector<int> vecRows_knightMoves {2, 1, -1, -2, -2, -1, 1, 2};
+// vector<int> vecCols_knightMoves {1, 2, 2, 1, -1, -2, -2, -1};
+// void generateNewRowCol(int rowShift, int colShift) {
+//   // Iterator used to store the position of searched element
+//   vector<int>::iterator itRow = find(vecRows_knightMoves.begin(), vecRows_knightMoves.end(), rowShift);
+//   vector<int>::iterator itCol = find(vecCols_knightMoves.begin(), vecCols_knightMoves.end(), colShift);
+//   int rowShiftIndex = itRow - vecRows_knightMoves.begin();
+//   int colShiftIndex = itCol - vecCols_knightMoves.begin();
+//
+//   // if x and y have the same index, remove them from both vectors
+//   if (rowShiftIndex == colShiftIndex) {
+//     vecRows_knightMoves.erase(vecRows_knightMoves.begin() + rowShiftIndex);
+//     vecCols_knightMoves.erase(vecCols_knightMoves.begin() + colShiftIndex);
+//   }
+//
+//   int counter = 0;
+//   while(!isValid(row, col) &&
+//         ( ((abs(row - vecRows_knightMoves[counter]) != 2) && (abs(col - vecCols_knightMoves[counter]) != 1)) ||
+//         ((abs(row - vecRows_knightMoves[counter]) != 1) && (abs(col - vecCols_knightMoves[counter]) != 2)) ) &&
+//         (((row + vecRows_knightMoves[counter]) < 0 && (row + vecRows_knightMoves[counter]) > 4) && ((col + vecCols_knightMoves[counter]) < 0 && (col + vecCols_knightMoves[counter]) > 4))) {
+//     counter++;
+//     generateNewRowCol(vecRows_knightMoves[counter], vecCols_knightMoves[counter]);
+//   }
+//
+//   row += vecRows_knightMoves[counter];
+//   col += vecCols_knightMoves[counter];
+//
+//   cout << row << col;
 // }
